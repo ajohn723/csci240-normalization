@@ -1,1 +1,2 @@
 example file for git assignment
+"Commit made for git assignment"
