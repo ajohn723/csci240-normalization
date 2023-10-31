@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: schoolDatabase
 -- ------------------------------------------------------
--- Server version	8.0.34-0ubuntu0.22.04.1
+-- Server version	8.0.35-0ubuntu0.22.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,13 +16,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `CLASS`
+-- Table structure for table `Class`
 --
 
-DROP TABLE IF EXISTS `CLASS`;
+DROP TABLE IF EXISTS `Class`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `CLASS` (
+CREATE TABLE `Class` (
   `ClassID` int NOT NULL,
   `ClassName` varchar(50) DEFAULT NULL,
   `Description` varchar(255) DEFAULT NULL,
@@ -32,48 +32,51 @@ CREATE TABLE `CLASS` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `CLASS`
+-- Dumping data for table `Class`
 --
 
-LOCK TABLES `CLASS` WRITE;
-/*!40000 ALTER TABLE `CLASS` DISABLE KEYS */;
-INSERT INTO `CLASS` VALUES (100,'Homeroom','Student Homeroom','None'),(231,'Intro to Art','A brief intro to art.','ART'),(456,'History','History of rivers in Montana.','HIST'),(870,'Anthropology','Intro to anthropology','ANTHRO');
-/*!40000 ALTER TABLE `CLASS` ENABLE KEYS */;
+LOCK TABLES `Class` WRITE;
+/*!40000 ALTER TABLE `Class` DISABLE KEYS */;
+INSERT INTO `Class` VALUES (100,'Homeroom','Student homeroom.','HOMEROOM'),(101,'Algebra 1','Introduction to algebra concepts.','MATHEMATICS'),(102,'Biology','Study of living organisms and their interactions','SCIENCE'),(103,'English Literature','Exploring classic and modern literature.','ENGLISH'),(104,'World History','Examination of historical events and cultures.','SOCIAL STUDIES');
+/*!40000 ALTER TABLE `Class` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `GRADELEVEL`
+-- Table structure for table `Enrollment`
 --
 
-DROP TABLE IF EXISTS `GRADELEVEL`;
+DROP TABLE IF EXISTS `Enrollment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `GRADELEVEL` (
-  `ClassID` int NOT NULL,
-  `GradeLevel` varchar(10) NOT NULL,
-  PRIMARY KEY (`ClassID`,`GradeLevel`),
-  CONSTRAINT `GRADELEVEL_ibfk_1` FOREIGN KEY (`ClassID`) REFERENCES `CLASS` (`ClassID`)
+CREATE TABLE `Enrollment` (
+  `PersonID` int NOT NULL,
+  `SectionID` int NOT NULL,
+  `Grade` varchar(1) DEFAULT NULL,
+  PRIMARY KEY (`PersonID`,`SectionID`),
+  KEY `SectionID` (`SectionID`),
+  CONSTRAINT `Enrollment_ibfk_1` FOREIGN KEY (`PersonID`) REFERENCES `Student` (`PersonID`),
+  CONSTRAINT `Enrollment_ibfk_2` FOREIGN KEY (`SectionID`) REFERENCES `Section` (`SectionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `GRADELEVEL`
+-- Dumping data for table `Enrollment`
 --
 
-LOCK TABLES `GRADELEVEL` WRITE;
-/*!40000 ALTER TABLE `GRADELEVEL` DISABLE KEYS */;
-INSERT INTO `GRADELEVEL` VALUES (100,'0'),(231,'100'),(456,'200'),(870,'150');
-/*!40000 ALTER TABLE `GRADELEVEL` ENABLE KEYS */;
+LOCK TABLES `Enrollment` WRITE;
+/*!40000 ALTER TABLE `Enrollment` DISABLE KEYS */;
+INSERT INTO `Enrollment` VALUES (115,201,'A'),(115,202,'B'),(116,202,'A'),(116,203,'C'),(117,203,'B'),(117,204,'C');
+/*!40000 ALTER TABLE `Enrollment` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `PERSON`
+-- Table structure for table `Person`
 --
 
-DROP TABLE IF EXISTS `PERSON`;
+DROP TABLE IF EXISTS `Person`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `PERSON` (
+CREATE TABLE `Person` (
   `PersonID` int NOT NULL,
   `FirstName` varchar(50) DEFAULT NULL,
   `LastName` varchar(50) DEFAULT NULL,
@@ -82,23 +85,23 @@ CREATE TABLE `PERSON` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `PERSON`
+-- Dumping data for table `Person`
 --
 
-LOCK TABLES `PERSON` WRITE;
-/*!40000 ALTER TABLE `PERSON` DISABLE KEYS */;
-INSERT INTO `PERSON` VALUES (111,'Jane','Doe'),(222,'John','Doe'),(544,'Melissa','Johnson'),(677,'Erica','Reeve');
-/*!40000 ALTER TABLE `PERSON` ENABLE KEYS */;
+LOCK TABLES `Person` WRITE;
+/*!40000 ALTER TABLE `Person` DISABLE KEYS */;
+INSERT INTO `Person` VALUES (115,'Mia','Lee'),(116,'Jack','White'),(117,'Lily','Clark'),(118,'Alex','King'),(119,'Eva','Brown');
+/*!40000 ALTER TABLE `Person` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `SECTION`
+-- Table structure for table `Section`
 --
 
-DROP TABLE IF EXISTS `SECTION`;
+DROP TABLE IF EXISTS `Section`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `SECTION` (
+CREATE TABLE `Section` (
   `SectionID` int NOT NULL,
   `ClassID` int DEFAULT NULL,
   `RoomNumber` varchar(20) DEFAULT NULL,
@@ -106,74 +109,70 @@ CREATE TABLE `SECTION` (
   PRIMARY KEY (`SectionID`),
   KEY `ClassID` (`ClassID`),
   KEY `TeacherID` (`TeacherID`),
-  CONSTRAINT `SECTION_ibfk_1` FOREIGN KEY (`ClassID`) REFERENCES `CLASS` (`ClassID`),
-  CONSTRAINT `SECTION_ibfk_2` FOREIGN KEY (`TeacherID`) REFERENCES `TEACHER` (`TeacherID`)
+  CONSTRAINT `Section_ibfk_1` FOREIGN KEY (`ClassID`) REFERENCES `Class` (`ClassID`),
+  CONSTRAINT `Section_ibfk_2` FOREIGN KEY (`TeacherID`) REFERENCES `Teacher` (`PersonID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `SECTION`
+-- Dumping data for table `Section`
 --
 
-LOCK TABLES `SECTION` WRITE;
-/*!40000 ALTER TABLE `SECTION` DISABLE KEYS */;
-INSERT INTO `SECTION` VALUES (200,456,'221',6773),(220,231,'121',5445),(300,870,'321',5445),(400,100,'25',5445);
-/*!40000 ALTER TABLE `SECTION` ENABLE KEYS */;
+LOCK TABLES `Section` WRITE;
+/*!40000 ALTER TABLE `Section` DISABLE KEYS */;
+INSERT INTO `Section` VALUES (100,100,'299',118),(101,100,'300',119),(201,101,'301',118),(202,102,'302',118),(203,103,'303',119),(204,104,'304',119);
+/*!40000 ALTER TABLE `Section` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `STUDENT`
+-- Table structure for table `Student`
 --
 
-DROP TABLE IF EXISTS `STUDENT`;
+DROP TABLE IF EXISTS `Student`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `STUDENT` (
-  `StudentID` int NOT NULL,
-  `PersonID` int DEFAULT NULL,
+CREATE TABLE `Student` (
+  `PersonID` int NOT NULL,
   `HomeroomClassroomID` int DEFAULT NULL,
-  PRIMARY KEY (`StudentID`),
-  KEY `PersonID` (`PersonID`),
+  PRIMARY KEY (`PersonID`),
   KEY `HomeroomClassroomID` (`HomeroomClassroomID`),
-  CONSTRAINT `STUDENT_ibfk_1` FOREIGN KEY (`PersonID`) REFERENCES `PERSON` (`PersonID`),
-  CONSTRAINT `STUDENT_ibfk_2` FOREIGN KEY (`HomeroomClassroomID`) REFERENCES `SECTION` (`SectionID`)
+  CONSTRAINT `Student_ibfk_1` FOREIGN KEY (`PersonID`) REFERENCES `Person` (`PersonID`),
+  CONSTRAINT `Student_ibfk_2` FOREIGN KEY (`HomeroomClassroomID`) REFERENCES `Section` (`SectionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `STUDENT`
+-- Dumping data for table `Student`
 --
 
-LOCK TABLES `STUDENT` WRITE;
-/*!40000 ALTER TABLE `STUDENT` DISABLE KEYS */;
-INSERT INTO `STUDENT` VALUES (1110,111,400),(2220,222,400);
-/*!40000 ALTER TABLE `STUDENT` ENABLE KEYS */;
+LOCK TABLES `Student` WRITE;
+/*!40000 ALTER TABLE `Student` DISABLE KEYS */;
+INSERT INTO `Student` VALUES (115,100),(116,100),(117,101);
+/*!40000 ALTER TABLE `Student` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TEACHER`
+-- Table structure for table `Teacher`
 --
 
-DROP TABLE IF EXISTS `TEACHER`;
+DROP TABLE IF EXISTS `Teacher`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `TEACHER` (
-  `TeacherID` int NOT NULL,
-  `PersonID` int DEFAULT NULL,
-  PRIMARY KEY (`TeacherID`),
-  KEY `PersonID` (`PersonID`),
-  CONSTRAINT `TEACHER_ibfk_1` FOREIGN KEY (`PersonID`) REFERENCES `PERSON` (`PersonID`)
+CREATE TABLE `Teacher` (
+  `PersonID` int NOT NULL,
+  PRIMARY KEY (`PersonID`),
+  CONSTRAINT `Teacher_ibfk_1` FOREIGN KEY (`PersonID`) REFERENCES `Person` (`PersonID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TEACHER`
+-- Dumping data for table `Teacher`
 --
 
-LOCK TABLES `TEACHER` WRITE;
-/*!40000 ALTER TABLE `TEACHER` DISABLE KEYS */;
-INSERT INTO `TEACHER` VALUES (5445,544),(6773,677);
-/*!40000 ALTER TABLE `TEACHER` ENABLE KEYS */;
+LOCK TABLES `Teacher` WRITE;
+/*!40000 ALTER TABLE `Teacher` DISABLE KEYS */;
+INSERT INTO `Teacher` VALUES (118),(119);
+/*!40000 ALTER TABLE `Teacher` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -185,4 +184,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-23  3:19:51
+-- Dump completed on 2023-10-31 19:06:31
