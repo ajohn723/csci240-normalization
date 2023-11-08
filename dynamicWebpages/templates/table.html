@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  Example Table
+{% endblock %}
+
+{% block content %}
+
+<table>
+  <tr>
+    <th>Person ID</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+  </tr>
+  <tr>
+    <td>115</td>
+    <td>Mia</td>
+    <td>Lee</td>
+  </tr>
+  <tr>
+    <td>116</td>
+    <td>Jack</td>
+    <td>White</td>
+  </tr> 
+  <tr>
+    <td>117</td>
+    <td>Lily</td>
+    <td>Clark</td>
+  </tr>
+  <tr>
+    <td>
+      {{personID}}
+    </td>
+    <td>
+      {{firstname}}
+    </td>
+    <td>
+      {{lastname}}
+    </td>
+  </tr>
+</table>
+{% endblock %}
