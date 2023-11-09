@@ -4,10 +4,12 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
+#index should be first form
 @app.route('/')
 def index():
     return render_template("form-get.html")
 
+#second page populates tables
 @app.route('/submitformGet.html', methods=['GET'])
 def renderTableGet():
     personID = request.args.get('personID')
